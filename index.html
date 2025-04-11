@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Zoo Roulette Offset Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 400px;
+      margin: auto;
+    }
+    input, button {
+      padding: 10px;
+      margin: 8px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    h2 {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h2>Zoo Roulette Offset Calculator</h2>
+
+  <label>Last Target:</label>
+  <input type="number" id="lastTarget" placeholder="e.g. 5" />
+
+  <label>Current Target:</label>
+  <input type="number" id="currentTarget" placeholder="e.g. 25" />
+
+  <label>Speed (e.g. 4 or 5):</label>
+  <input type="number" id="speed" placeholder="e.g. 4" />
+
+  <button onclick="calculate()">Predict Next</button>
+
+  <h3 id="result"></h3>
+
+  <script>
+    function calculate() {
+      let last = parseInt(document.getElementById('lastTarget').value);
+      let current = parseInt(document.getElementById('currentTarget').value);
+      let speed = parseInt(document.getElementById('speed').value);
+
+      if (isNaN(last) || isNaN(current) || isNaN(speed)) {
+        document.getElementById("result").innerText = "Please fill all fields correctly!";
+        return;
+      }
+
+      let offset = current - last;
+      let offsetDiff = Math.abs(offset);
+      let step = speed * speed;
+      let finalStep = offsetDiff + last;
+      let result = finalStep % 28;
+
+      document.getElementById("result").innerText = "Predicted Target: " + result;
+    }
+  </script>
+</body>
+</html>
