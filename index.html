@@ -1,69 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Zoo Roulette Prediction</title>
+  <title>Zoo Roulette Offset Calculator</title>
   <style>
     body {
       font-family: Arial;
-      background: #f7f7f7;
       padding: 20px;
+      background: #f9f9f9;
       text-align: center;
+    }
+    .container {
+      background: white;
+      max-width: 400px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     input, button {
       padding: 10px;
-      margin: 8px;
+      margin: 10px;
+      width: 90%;
       font-size: 16px;
-      width: 80%;
     }
-    .box {
-      background: white;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0px 0px 8px rgba(0,0,0,0.1);
-      max-width: 400px;
-      margin: auto;
-    }
-    h2 { margin-bottom: 20px; }
   </style>
 </head>
 <body>
 
-  <div class="box">
-    <h2>Zoo Roulette Offset Calculator</h2>
+<div class="container">
+  <h2>Zoo Roulette Offset Calculator</h2>
 
-    <input type="number" id="lastTarget" placeholder="Last Target"><br>
-    <input type="number" id="currentTarget" placeholder="Current Target"><br>
-    <input type="number" id="speed" placeholder="Speed (4 or 5)"><br>
+  <input type="number" id="lastTarget" placeholder="Last Target (e.g. 5)">
+  <input type="number" id="previousTarget" placeholder="Previous Current Target (e.g. 6)">
+  <input type="number" id="currentTarget" placeholder="Current Target (e.g. 10)">
+  <input type="number" id="speed" placeholder="Speed (e.g. 4 or 5)">
+  <button onclick="predict()">Predict Next</button>
 
-    <button onclick="predict()">Predict Next</button>
+  <h3 id="result">Predicted Target:</h3>
+</div>
 
-    <h3 id="result">Predicted Target: </h3>
-  </div>
+<script>
+  function predict() {
+    const last = parseInt(document.getElementById("lastTarget").value);
+    const prev = parseInt(document.getElementById("previousTarget").value);
+    const current = parseInt(document.getElementById("currentTarget").value);
+    const speed = parseInt(document.getElementById("speed").value);
 
-  <script>
-    function predict() {
-      const last = parseInt(document.getElementById("lastTarget").value);
-      const current = parseInt(document.getElementById("currentTarget").value);
-      const speed = parseInt(document.getElementById("speed").value);
-
-      if (isNaN(last) || isNaN(current) || isNaN(speed)) {
-        document.getElementById("result").innerText = "Fill all fields correctly!";
-        return;
-      }
-
-      const offset1 = current - last;
-      const offset2 = current - last; // same as offset1 here
-      const offsetDiff = offset2 - offset1;
-      const correction = Math.abs(offsetDiff - (speed * speed));
-      let prediction = last + correction + 2;
-
-      const finalTarget = ((prediction - 1) % 28) + 1;
-
-      document.getElementById("result").innerText = "Predicted Target: " + finalTarget;
+    if (isNaN(last) || isNaN(prev) || isNaN(current) || isNaN(speed)) {
+      document.getElementById("result").innerText = "Please fill all fields correctly!";
+      return;
     }
-  </script>
+
+    const offset1 = prev - last;
+    const offset2 = current - last;
+    const diff = offset2 - offset1;
+    const step = Math.abs(diff - (speed * speed));
+    let prediction = last + step + 2;
+
+    const final = ((prediction - 1) % 28) + 1;
+
+    document.getElementById("result").innerText = "Predicted Target: " + final;
+  }
+</script>
 
 </body>
 </html>
