@@ -1,55 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Zoo Offset Calculator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zoo Roulette Prediction</title>
   <style>
-    body { font-family: Arial; padding: 20px; background: #f5f5f5; }
-    input, button { padding: 10px; margin: 5px; }
+    body {
+      font-family: Arial;
+      background: #f7f7f7;
+      padding: 20px;
+      text-align: center;
+    }
+    input, button {
+      padding: 10px;
+      margin: 8px;
+      font-size: 16px;
+      width: 80%;
+    }
+    .box {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 8px rgba(0,0,0,0.1);
+      max-width: 400px;
+      margin: auto;
+    }
+    h2 { margin-bottom: 20px; }
   </style>
 </head>
 <body>
-  <h2>Zoo Offset Prediction</h2>
 
-  <label>Last Target:</label>
-  <input type="number" id="lastTarget"><br>
+  <div class="box">
+    <h2>Zoo Roulette Offset Calculator</h2>
 
-  <label>Speed (4 or 5):</label>
-  <input type="number" id="speed"><br>
+    <input type="number" id="lastTarget" placeholder="Last Target"><br>
+    <input type="number" id="currentTarget" placeholder="Current Target"><br>
+    <input type="number" id="speed" placeholder="Speed (4 or 5)"><br>
 
-  <label>Current Target:</label>
-  <input type="number" id="currentTarget"><br>
+    <button onclick="predict()">Predict Next</button>
 
-  <button onclick="predict()">Predict Result</button>
-  <h3 id="result"></h3>
+    <h3 id="result">Predicted Target: </h3>
+  </div>
 
   <script>
     function predict() {
-      let last = parseInt(document.getElementById("lastTarget").value);
-      let speed = parseInt(document.getElementById("speed").value);
-      let current = parseInt(document.getElementById("currentTarget").value);
+      const last = parseInt(document.getElementById("lastTarget").value);
+      const current = parseInt(document.getElementById("currentTarget").value);
+      const speed = parseInt(document.getElementById("speed").value);
 
-      // Step 1: offset1
-      let offset1 = current - last;
+      if (isNaN(last) || isNaN(current) || isNaN(speed)) {
+        document.getElementById("result").innerText = "Fill all fields correctly!";
+        return;
+      }
 
-      // Step 2: agla offset (manlo next = 10, previous = same)
-      let next = current;
-      let offset2 = next - last;
+      const offset1 = current - last;
+      const offset2 = current - last; // same as offset1 here
+      const offsetDiff = offset2 - offset1;
+      const correction = Math.abs(offsetDiff - (speed * speed));
+      let prediction = last + correction + 2;
 
-      // Step 3: difference
-      let diff = offset2 - offset1;
+      const finalTarget = ((prediction - 1) % 28) + 1;
 
-      // Step 4: speed correction
-      let correction = Math.abs(diff - (speed * speed));
-
-      // Step 5: add to last
-      let predicted = last + correction;
-
-      // Step 6: adjustment +1 +1
-      predicted += 2;
-
-      // Final output
-      document.getElementById("result").innerText = "Predicted Target: " + (predicted % 28);
+      document.getElementById("result").innerText = "Predicted Target: " + finalTarget;
     }
   </script>
+
 </body>
 </html>
